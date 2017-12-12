@@ -60,6 +60,20 @@ class SwipeRow extends Component {
 		clearTimeout(this._ensureScrollEnabledTimer)
 	}
 
+	componentWillReceiveProps(nextProps) {
+
+		if(nextProps.preview && nextProps.preview !== this.props.preview) {
+
+			let previewOpenValue = this.props.previewOpenValue || this.props.rightOpenValue * 1;
+			this.getPreviewAnimation(previewOpenValue, PREVIEW_OPEN_DELAY)
+			.start( _ => {
+				this.getPreviewAnimation(0, PREVIEW_CLOSE_DELAY).start();
+			});
+
+		}
+
+	}
+
 	getPreviewAnimation(toValue, delay) {
 		return Animated.timing(
 			this._translateX,
@@ -74,9 +88,9 @@ class SwipeRow extends Component {
 			hiddenWidth: e.nativeEvent.layout.width,
 		});
 
-		if (this.props.preview && !this.ranPreview) {
+		if (this.props.preview) {
 			this.ranPreview = true;
-			let previewOpenValue = this.props.previewOpenValue || this.props.rightOpenValue * 0.5;
+			let previewOpenValue = this.props.previewOpenValue || this.props.rightOpenValue * 1;
 			this.getPreviewAnimation(previewOpenValue, PREVIEW_OPEN_DELAY)
 			.start( _ => {
 				this.getPreviewAnimation(0, PREVIEW_CLOSE_DELAY).start();
